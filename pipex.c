@@ -6,7 +6,7 @@
 /*   By: athonda <athonda@student.42singapore.sg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 23:36:32 by athonda           #+#    #+#             */
-/*   Updated: 2024/08/11 19:58:00 by athonda          ###   ########.fr       */
+/*   Updated: 2024/08/11 20:09:11 by athonda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int main(int argc, char **argv, char **envp)
 	if (pid == 0)
 	{
 		fd = open("./test.txt", O_WRONLY);
-		dup2(fd, 1);
+		dup2(fd, STDOUT_FILENO);
 		if (execve("/usr/bin/ls", argv, envp) == -1)
 			_exit (0);
 	}
