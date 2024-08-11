@@ -1,9 +1,11 @@
-total 40
-drwxr-xr-x  3 root    root     4096 Aug 11 13:08 .
+This is the first in child process
+process ID in child: 239024
+total 44
+drwxr-xr-x  3 root    root     4096 Aug 11 19:57 .
 drwxr-x--- 14 athonda athonda  4096 Aug 11 13:05 ..
-drwxr-xr-x  8 root    root     4096 Aug 10 08:34 .git
+drwxr-xr-x  8 root    root     4096 Aug 11 14:36 .git
 -rw-r--r--  1 root    root        6 Aug 11 13:06 .gitignore
 -rw-r--r--  1 root    root        7 Aug 10 00:50 README.md
--rwxr-xr-x  1 root    root    16168 Aug 11 13:06 a.out
--rw-r--r--  1 root    root     1320 Aug 11 13:06 pipex.c
--rw-r--r--  1 root    root        0 Aug 11 13:08 test.txt
+-rwxr-xr-x  1 root    root    16344 Aug 11 19:57 a.out
+-rw-r--r--  1 root    root     1658 Aug 11 19:56 pipex.c
+-rw-r--r--  1 root    root      273 Aug 11 19:57 test.txt
