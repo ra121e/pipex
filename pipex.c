@@ -6,7 +6,7 @@
 /*   By: athonda <athonda@student.42singapore.sg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 23:36:32 by athonda           #+#    #+#             */
-/*   Updated: 2024/08/12 12:08:37 by athonda          ###   ########.fr       */
+/*   Updated: 2024/08/12 12:10:25 by athonda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,8 @@ int main(int argc, char **argv, char **envp)
 		close(pipfd[0]);
 		dup2(pipfd[1], STDOUT_FILENO);
 		close(pipfd[1]);
-		write(1, p, 14);
-		//if (execve("/usr/bin/ls", argv, envp) == -1)
-		//	_exit (0);
+		if (execve("/usr/bin/ls", argv, envp) == -1)
+			_exit (0);
 	}
 	else if (pid > 0)
 	{
