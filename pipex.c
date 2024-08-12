@@ -6,7 +6,7 @@
 /*   By: athonda <athonda@student.42singapore.sg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 23:36:32 by athonda           #+#    #+#             */
-/*   Updated: 2024/08/12 11:56:37 by athonda          ###   ########.fr       */
+/*   Updated: 2024/08/12 12:08:37 by athonda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int main(int argc, char **argv, char **envp)
 	int		status;
 	int		fd;
 	int		pipfd[2];
-	char	*p = "Hi pipe\n";
+	char	*p = "Hi great pipe\n";
 
 	(void)argc;
 	(void)argv;
@@ -31,9 +31,9 @@ int main(int argc, char **argv, char **envp)
 	if (pid == 0)
 	{
 		close(pipfd[0]);
-		write(pipfd[1], p, 8);
-		//dup2(pipfd[1], STDOUT_FILENO);
-		//close(pipfd[1]);
+		dup2(pipfd[1], STDOUT_FILENO);
+		close(pipfd[1]);
+		write(1, p, 14);
 		//if (execve("/usr/bin/ls", argv, envp) == -1)
 		//	_exit (0);
 	}
@@ -43,10 +43,10 @@ int main(int argc, char **argv, char **envp)
 		ssize_t	len_check;
 
 		close(pipfd[1]);
-		//dup2(pipfd[0], STDIN_FILENO);
-		//close(pipfd[0]);
+		dup2(pipfd[0], STDIN_FILENO);
+		close(pipfd[0]);
 		printf("wait for end of child process\n");
-		while ((len_check = read(pipfd[0], buf, 1)) > 0)
+		while ((len_check = read(0, buf, 1)) > 0)
 		{
 			write(1, buf, 1);
 		}
