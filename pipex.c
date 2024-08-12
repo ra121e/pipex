@@ -6,7 +6,7 @@
 /*   By: athonda <athonda@student.42singapore.sg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 23:36:32 by athonda           #+#    #+#             */
-/*   Updated: 2024/08/12 12:10:25 by athonda          ###   ########.fr       */
+/*   Updated: 2024/08/12 12:16:23 by athonda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,12 @@ int main(int argc, char **argv, char **envp)
 		dup2(pipfd[0], STDIN_FILENO);
 		close(pipfd[0]);
 		printf("wait for end of child process\n");
-		while ((len_check = read(0, buf, 1)) > 0)
-		{
-			write(1, buf, 1);
-		}
-		//char *argv[] = {"/usr/bin/cat", "-e"};
-		//execve("/usr/bin/cat", argv, envp);
+		//while ((len_check = read(0, buf, 1)) > 0)
+		//{
+		//	write(1, buf, 1);
+		//}
+		//char *argv[] = {"/usr/bin/wc", "-l", "NULL"};
+		execve("/usr/bin/wc", argv, envp);
 	}
 	return (0);
 }
