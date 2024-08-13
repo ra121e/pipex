@@ -6,51 +6,58 @@
 /*   By: athonda <athonda@student.42singapore.sg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 23:36:32 by athonda           #+#    #+#             */
-/*   Updated: 2024/08/12 12:16:23 by athonda          ###   ########.fr       */
+/*   Updated: 2024/08/13 13:26:35 by athonda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <sys/wait.h>
-#include <fcntl.h>
-#include <stdio.h>
+#include "pipex.h"
+
+void	child(char **argv, char **envp, int *pipfd)
+{
+		close(pipfd[0]);
+		dup2(pipfd[1], STDOUT_FILENO);
+		//close(pipfd[1]);
+		if (execve("/usr/bin/ls", argv, envp) == -1)
+		{
+			perror("execve error in child");
+		}
+}
+
+void	parent(char **argv, char **envp, int *pipfd)
+{
+		close(pipfd[1]);
+		dup2(pipfd[0], STDIN_FILENO);
+		//close(pipfd[0]);
+		printf("wait for end of child process\n");
+		if (execve("/usr/bin/wc", argv, envp) == -1)
+			perror("execve error in parent");
+
+}
+
+void	pipex(int argc, char **argv, char **envp)
+{
+	pid_t	pid;
+	int		pipfd[2];
+
+	if (pipe(pipfd) == -1)
+		perror("pip creation error");
+	pid = fork();
+	if (pid < 0)
+		perror("fork error!");
+	else if (pid == 0)
+		child(argv, envp, pipfd);
+	else if (pid > 0)
+		parent(argv, envp, pipfd);
+
+}
 
 int main(int argc, char **argv, char **envp)
 {
 	pid_t	pid;
-	int		status;
-	int		fd;
 	int		pipfd[2];
-	char	*p = "Hi great pipe\n";
 
-	(void)argc;
-	(void)argv;
-
-	pipe(pipfd);
-	pid = fork();
-	if (pid == 0)
-	{
-		close(pipfd[0]);
-		dup2(pipfd[1], STDOUT_FILENO);
-		close(pipfd[1]);
-		if (execve("/usr/bin/ls", argv, envp) == -1)
-			_exit (0);
-	}
-	else if (pid > 0)
-	{
-		char	buf[2];
-		ssize_t	len_check;
-
-		close(pipfd[1]);
-		dup2(pipfd[0], STDIN_FILENO);
-		close(pipfd[0]);
-		printf("wait for end of child process\n");
-		//while ((len_check = read(0, buf, 1)) > 0)
-		//{
-		//	write(1, buf, 1);
-		//}
-		//char *argv[] = {"/usr/bin/wc", "-l", "NULL"};
-		execve("/usr/bin/wc", argv, envp);
-	}
+	//if (argc != 5)
+	//	return (0);
+	pipex(argc, argv, envp);
 	return (0);
 }
