@@ -6,7 +6,7 @@
 /*   By: athonda <athonda@student.42singapore.sg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 23:36:32 by athonda           #+#    #+#             */
-/*   Updated: 2024/08/13 13:26:35 by athonda          ###   ########.fr       */
+/*   Updated: 2024/08/13 20:55:33 by athonda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 void	child(char **argv, char **envp, int *pipfd)
 {
 		close(pipfd[0]);
-		dup2(pipfd[1], STDOUT_FILENO);
+		if (dup2(pipfd[1], STDOUT_FILENO) < 0)
+			perror("dup2 error in child");
 		//close(pipfd[1]);
 		if (execve("/usr/bin/ls", argv, envp) == -1)
 		{
@@ -26,7 +27,8 @@ void	child(char **argv, char **envp, int *pipfd)
 void	parent(char **argv, char **envp, int *pipfd)
 {
 		close(pipfd[1]);
-		dup2(pipfd[0], STDIN_FILENO);
+		if (dup2(pipfd[0], STDIN_FILENO) < 0)
+			perror("dup2 error in parent");
 		//close(pipfd[0]);
 		printf("wait for end of child process\n");
 		if (execve("/usr/bin/wc", argv, envp) == -1)
