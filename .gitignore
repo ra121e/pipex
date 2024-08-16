@@ -1,2 +1,4 @@
 a.out
 pipetest.c
+*.o
+*.a
