@@ -1,0 +1,30 @@
+total 1900
+drwxr-xr-x  3 root    root      4096 Aug 17 07:53 .
+drwxr-x--- 14 athonda athonda   4096 Aug 11 13:05 ..
+drwxr-xr-x  8 root    root      4096 Aug 16 16:19 .git
+-rw-r--r--  1 root    root        25 Aug 16 13:25 .gitignore
+-rw-r--r--  1 root    root      1339 Aug 16 13:04 Makefile
+-rw-r--r--  1 root    root         7 Aug 10 00:50 README.md
+-rwxr-xr-x  1 root    root     78336 Aug 13 20:54 a.out
+-rw-r--r--  1 root    root      1554 Aug 16 12:37 exec_cmd.c
+-rw-r--r--  1 root    root    139000 Aug 16 16:15 exec_cmd.o
+-rw-r--r--  1 root    root      1017 Aug 15 21:43 free_split.c
+-rw-r--r--  1 root    root    137880 Aug 16 16:15 free_split.o
+-rw-r--r--  1 root    root      2251 Aug 16 11:59 ft_split.c
+-rw-r--r--  1 root    root    140584 Aug 16 16:15 ft_split.o
+-rw-r--r--  1 root    root      3091 Aug 16 13:19 get_fullpath.c
+-rw-r--r--  1 root    root    140232 Aug 16 16:15 get_fullpath.o
+-rw-r--r--  1 root    root       311 Aug 16 16:15 infile
+lrwxrwxrwx  1 root    root        19 Aug 16 14:52 libft -> /home/athonda/libft
+-rw-r--r--  1 root    root    840708 Aug 16 16:15 libpipx.a
+-rw-r--r--  1 root    root      1123 Aug 16 16:03 open_file.c
+-rw-r--r--  1 root    root        24 Aug 16 16:18 outfile
+-rw-r--r--  1 root    root       453 Aug 12 10:56 pipetest.c
+-rwxr-xr-x  1 root    root     97456 Aug 16 16:15 pipex
+-rw-r--r--  1 root    root      2218 Aug 16 16:11 pipex.c
+-rw-r--r--  1 root    root      1918 Aug 16 13:01 pipex.h
+-rw-r--r--  1 root    root    141584 Aug 16 16:15 pipex.o
+-rwxr-xr-x  1 root    root         0 Aug 17 07:53 te
+-rw-r--r--  1 root    root         0 Aug 11 20:42 test.txt
+-rw-r--r--  1 root    root      2699 Aug 16 13:01 utils.c
+-rw-r--r--  1 root    root    140728 Aug 16 16:15 utils.o

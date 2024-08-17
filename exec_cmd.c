@@ -6,7 +6,7 @@
 /*   By: athonda <athonda@student.42singapore.sg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 11:28:26 by athonda           #+#    #+#             */
-/*   Updated: 2024/08/16 12:37:28 by athonda          ###   ########.fr       */
+/*   Updated: 2024/08/17 15:03:45 by athonda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	exec_cmd(char *cmd, char **envp)
 	if (cmd_exe == NULL)
 	{
 		free_split(cmd_parts);
-		perror("get_fullpath error! in exec_cmd()");
+		perror("get_fullpath error! in exec_cmd() cmd_parts[0]");
 		return ;
 	}
 	if (execve(cmd_exe, cmd_parts, envp) == -1)
