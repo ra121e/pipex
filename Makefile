@@ -6,7 +6,7 @@
 #    By: athonda <athonda@student.42singapore.sg    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/13 13:34:27 by athonda           #+#    #+#              #
-#    Updated: 2024/08/17 19:09:20 by athonda          ###   ########.fr        #
+#    Updated: 2024/08/17 19:35:13 by athonda          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,7 @@ LIBFT		=	libft.a
 
 all: $(NAME)
 
-$(NAME): $(OBJCS)
+$(NAME): $(OBJS)
 		cc $(CFLAGS) $(OBJS) -o $(NAME)
 
 %.o: %.c pipex.h

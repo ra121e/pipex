@@ -3,3 +3,5 @@ pipetest.c
 *.o
 *.a
 pipex
+outfile
+infile
