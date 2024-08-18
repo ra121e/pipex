@@ -6,7 +6,7 @@
 /*   By: athonda <athonda@student.42singapore.sg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 16:25:29 by athonda           #+#    #+#             */
-/*   Updated: 2024/08/16 13:19:59 by athonda          ###   ########.fr       */
+/*   Updated: 2024/08/17 23:34:25 by athonda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ char	**find_envpath(char **envp)
  * @param[in] path
  * @return string of full path
  */
+
 char	*join_cmd_path(char *cmd, char *path)
 {
 	char	*dir;
