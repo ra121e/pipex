@@ -6,10 +6,9 @@
 /*   By: athonda <athonda@student.42singapore.sg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 09:43:45 by athonda           #+#    #+#             */
-/*   Updated: 2024/08/19 14:07:57 by athonda          ###   ########.fr       */
+/*   Updated: 2024/08/19 15:39:43 by athonda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 /**
  * @file pipex_bonus.c
@@ -26,7 +25,6 @@
  * @param[in] pipfd array of fd of pipe
  * @return none
  */
-
 
 int	sub_stream(char *cmd, char **envp, int fd)
 {
@@ -74,7 +72,6 @@ void	parent(char **argv, char **envp, int *pipfd)
 void	pipex(int argc, char **argv, char **envp)
 {
 	int		i;
-	//int		wstatus;
 	int		fd;
 
 	fd = open(argv[1], O_RDONLY, 0777);
@@ -93,11 +90,8 @@ void	pipex(int argc, char **argv, char **envp)
 	exec_cmd(argv[argc - 2], envp);
 }
 
-int main(int argc, char **argv, char **envp)
+int	main(int argc, char **argv, char **envp)
 {
-	//pid_t	pid;
-	//int		pipfd[2];
-
 	if (argc < 5)
 	{
 		perror("need more that 4 arguments: ./pipex file command command file");
