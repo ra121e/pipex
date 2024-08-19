@@ -6,7 +6,7 @@
 /*   By: athonda <athonda@student.42singapore.sg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 09:43:45 by athonda           #+#    #+#             */
-/*   Updated: 2024/08/18 10:24:37 by athonda          ###   ########.fr       */
+/*   Updated: 2024/08/19 12:41:30 by athonda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,12 @@
  * @return none
  */
 
-void	child(char **argv, char **envp, int *pipfd)
+/*
+void	child(char **argv, char **envp, int *pipfd, int fd)
 {
-	int	fd;
-
 	close(pipfd[0]);
 	if (dup2(pipfd[1], STDOUT_FILENO) < 0)
 		perror("dup2 pipe write -> standard out: error in child");
-	fd = open(argv[1], O_RDONLY, 0777);
 	if (dup2(fd, STDIN_FILENO) < 0)
 		perror("dup2 pipe read -> standard IN: error in child");
 	exec_cmd(argv[2], envp);
@@ -47,44 +45,55 @@ void	parent(char **argv, char **envp, int *pipfd)
 	close(pipfd[1]);
 	if (dup2(pipfd[0], STDIN_FILENO) < 0)
 		perror("dup2 pipe read -> standard IN: error in parent");
-	fd = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (dup2(fd, STDOUT_FILENO) < 0)
 		perror("dup2 pipe write -> standard OUT: error in parent");
-	exec_cmd(argv[3], envp);
 }
+*/
 
 void	pipex(int argc, char **argv, char **envp)
 {
-	pid_t	pid[31245];
+	pid_t	pid;
 	int		pipfd[2];
-	int		*pipfd[2];
 	int		i;
-	int		wstatus;
+	//int		wstatus;
+	int		fd;
 
-	(void)argc;
-	if (pipe(pipfd[0]) == -1)
-		perror("pip creation error");
-	pid[0] = fork();
-	if (pid[0] < 0)
-		perror("fork error!");
-	else if (pid[0] == 0)
-		child(argv, envp, pipfd[0]);
-	else if (pid[0] > 0)
+	fd = open(argv[1], O_RDONLY, 0777);
+	i = 2;
+	while (i < argc - 1)
 	{
-		i = 1;
-		while (i < argc)
+		if (pipe(pipfd) == -1)
+			perror("pip creation error");
+		pid = fork();
+		if (pid < 0)
+			perror("fork error!");
+		else if (pid == 0)
 		{
-			if (pipe(pipfd[i]) == -1)
-				perror("error desu");
-			pid[i] = fork();
-			if (pid[i] < 0)
-				perror("fork error!");
-			else if (pid[i] == 0)
-				child_mid(argv, envp, pipfd[i], pipfd[i - 1]);
-			else if (pid[i] > 0)
-				waitpid(pid[i], &wstatus, WNOHANG);
+			if (dup2(pipfd[1], STDOUT_FILENO) < 0)
+				perror("dup2 pipe write -> standard out: error in child");
+			close(pipfd[1]);
+			if (dup2(fd, STDIN_FILENO) < 0)
+				perror("dup2 pipe read -> standard IN: error in child");
+			close(fd);
+			close(pipfd[0]);
+			printf("before exec_cmd in child");
+			exec_cmd(argv[i], envp);
+		}
+		else if (pid > 0)
+		{
+			close(pipfd[1]);
+			//waitpid(pid, &wstatus, WNOHANG);
+			fd = pipfd[0];
 		}
 		i++;
+	}
+	if (dup2(fd, STDIN_FILENO) < 0)
+		perror("dup2 pipe read -> standard IN: error in the last");
+	close(fd);
+	fd = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	if (dup2(fd, STDOUT_FILENO) < 0)
+		perror("dup2 pipe write -> standard OUT: error in the last");
+	exec_cmd(argv[argc - 2], envp);
 }
 
 int main(int argc, char **argv, char **envp)
@@ -92,9 +101,9 @@ int main(int argc, char **argv, char **envp)
 	//pid_t	pid;
 	//int		pipfd[2];
 
-	if (argc != 5)
+	if (argc < 5)
 	{
-		perror("need 4 arguments: ./pipex file command command file");
+		perror("need more that 4 arguments: ./pipex file command command file");
 		return (0);
 	}
 	pipex(argc, argv, envp);
