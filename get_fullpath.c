@@ -6,7 +6,7 @@
 /*   By: athonda <athonda@student.42singapore.sg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 16:25:29 by athonda           #+#    #+#             */
-/*   Updated: 2024/08/17 23:34:25 by athonda          ###   ########.fr       */
+/*   Updated: 2024/08/19 14:41:18 by athonda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ char	**find_envpath(char **envp)
 		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
 		{
 			envpath = envp[i] + 5;
-			break;
+			break ;
 		}
 		i++;
 	}

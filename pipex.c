@@ -6,7 +6,7 @@
 /*   By: athonda <athonda@student.42singapore.sg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 23:36:32 by athonda           #+#    #+#             */
-/*   Updated: 2024/08/17 21:44:52 by athonda          ###   ########.fr       */
+/*   Updated: 2024/08/19 14:42:36 by athonda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,11 +69,8 @@ void	pipex(int argc, char **argv, char **envp)
 		parent(argv, envp, pipfd);
 }
 
-int main(int argc, char **argv, char **envp)
+int	main(int argc, char **argv, char **envp)
 {
-	//pid_t	pid;
-	//int		pipfd[2];
-
 	if (argc != 5)
 	{
 		perror("need 4 arguments: ./pipex file command command file");
