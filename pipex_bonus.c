@@ -6,7 +6,7 @@
 /*   By: athonda <athonda@student.42singapore.sg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 09:43:45 by athonda           #+#    #+#             */
-/*   Updated: 2024/08/19 12:41:30 by athonda          ###   ########.fr       */
+/*   Updated: 2024/08/19 14:07:57 by athonda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,17 +27,38 @@
  * @return none
  */
 
-/*
-void	child(char **argv, char **envp, int *pipfd, int fd)
+
+int	sub_stream(char *cmd, char **envp, int fd)
 {
-	close(pipfd[0]);
-	if (dup2(pipfd[1], STDOUT_FILENO) < 0)
-		perror("dup2 pipe write -> standard out: error in child");
-	if (dup2(fd, STDIN_FILENO) < 0)
-		perror("dup2 pipe read -> standard IN: error in child");
-	exec_cmd(argv[2], envp);
+	pid_t	pid;
+	int		pipfd[2];
+	int		wstatus;
+
+	if (pipe(pipfd) == -1)
+		perror("pip creation error");
+	pid = fork();
+	if (pid < 0)
+		perror("fork error!");
+	else if (pid == 0)
+	{
+		if (dup2(pipfd[1], STDOUT_FILENO) < 0)
+			perror("dup2 pipe write -> standard out: error in child");
+		close(pipfd[1]);
+		if (dup2(fd, STDIN_FILENO) < 0)
+			perror("dup2 pipe read -> standard IN: error in child");
+		close(fd);
+		close(pipfd[0]);
+		exec_cmd(cmd, envp);
+	}
+	else if (pid > 0)
+	{
+		close(pipfd[1]);
+		waitpid(pid, &wstatus, WNOHANG);
+	}
+	return (pipfd[0]);
 }
 
+/*
 void	parent(char **argv, char **envp, int *pipfd)
 {
 	int	fd;
@@ -52,8 +73,6 @@ void	parent(char **argv, char **envp, int *pipfd)
 
 void	pipex(int argc, char **argv, char **envp)
 {
-	pid_t	pid;
-	int		pipfd[2];
 	int		i;
 	//int		wstatus;
 	int		fd;
@@ -62,29 +81,7 @@ void	pipex(int argc, char **argv, char **envp)
 	i = 2;
 	while (i < argc - 1)
 	{
-		if (pipe(pipfd) == -1)
-			perror("pip creation error");
-		pid = fork();
-		if (pid < 0)
-			perror("fork error!");
-		else if (pid == 0)
-		{
-			if (dup2(pipfd[1], STDOUT_FILENO) < 0)
-				perror("dup2 pipe write -> standard out: error in child");
-			close(pipfd[1]);
-			if (dup2(fd, STDIN_FILENO) < 0)
-				perror("dup2 pipe read -> standard IN: error in child");
-			close(fd);
-			close(pipfd[0]);
-			printf("before exec_cmd in child");
-			exec_cmd(argv[i], envp);
-		}
-		else if (pid > 0)
-		{
-			close(pipfd[1]);
-			//waitpid(pid, &wstatus, WNOHANG);
-			fd = pipfd[0];
-		}
+		fd = sub_stream(argv[i], envp, fd);
 		i++;
 	}
 	if (dup2(fd, STDIN_FILENO) < 0)
