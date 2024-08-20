@@ -6,7 +6,7 @@
 /*   By: athonda <athonda@student.42singapore.sg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 09:43:45 by athonda           #+#    #+#             */
-/*   Updated: 2024/08/19 15:39:43 by athonda          ###   ########.fr       */
+/*   Updated: 2024/08/20 22:09:30 by athonda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,34 +26,23 @@
  * @return none
  */
 
-int	sub_stream(char *cmd, char **envp, int fd)
+void	sub_stream(char **argv, int argc, int pipfd[3], int loop)
 {
-	pid_t	pid;
-	int		pipfd[2];
-	int		wstatus;
-
-	if (pipe(pipfd) == -1)
-		perror("pip creation error");
-	pid = fork();
-	if (pid < 0)
-		perror("fork error!");
-	else if (pid == 0)
+	if (loop == 2)
 	{
-		if (dup2(pipfd[1], STDOUT_FILENO) < 0)
-			perror("dup2 pipe write -> standard out: error in child");
-		close(pipfd[1]);
-		if (dup2(fd, STDIN_FILENO) < 0)
-			perror("dup2 pipe read -> standard IN: error in child");
-		close(fd);
-		close(pipfd[0]);
-		exec_cmd(cmd, envp);
+		pipfd[2] = open(argv[1], O_RDONLY, 0777);
+		if (pipfd[2] == -1)
+			perror("open file");
 	}
-	else if (pid > 0)
-	{
-		close(pipfd[1]);
-		waitpid(pid, &wstatus, WNOHANG);
-	}
-	return (pipfd[0]);
+	else if (loop == (argc - 2))
+		pipfd[1] = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	if (dup2(pipfd[1], STDOUT_FILENO) < 0)
+		error_exit("dup2 pipe write -> standard out: error in child");
+	close(pipfd[1]);
+	if (dup2(pipfd[2], STDIN_FILENO) < 0)
+		error_exit("dup2 pipe read -> standard IN: error in child");
+	close(pipfd[2]);
+	close(pipfd[0]);
 }
 
 /*
@@ -71,23 +60,29 @@ void	parent(char **argv, char **envp, int *pipfd)
 
 void	pipex(int argc, char **argv, char **envp)
 {
+	pid_t	pid;
+	int		pipfd[3];
 	int		i;
-	int		fd;
+	//int		wstatus;
 
-	fd = open(argv[1], O_RDONLY, 0777);
-	i = 2;
-	while (i < argc - 1)
+	i = 1;
+	while (++i < argc - 1)
 	{
-		fd = sub_stream(argv[i], envp, fd);
-		i++;
+		if (pipe(pipfd) == -1)
+			error_exit("pip creation error");
+		pid = fork();
+		if (pid < 0)
+			error_exit("fork error!");
+		else if (pid == 0)
+		{
+			sub_stream(argv, argc, pipfd, i);
+			exec_cmd(argv[i], envp);
+		}
+		else if (pid > 0)
+			close(pipfd[1]);
+		pipfd[2] = pipfd[0];
 	}
-	if (dup2(fd, STDIN_FILENO) < 0)
-		perror("dup2 pipe read -> standard IN: error in the last");
-	close(fd);
-	fd = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0777);
-	if (dup2(fd, STDOUT_FILENO) < 0)
-		perror("dup2 pipe write -> standard OUT: error in the last");
-	exec_cmd(argv[argc - 2], envp);
+	wait_all();
 }
 
 int	main(int argc, char **argv, char **envp)
