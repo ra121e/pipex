@@ -6,7 +6,7 @@
 /*   By: athonda <athonda@student.42singapore.sg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 09:43:45 by athonda           #+#    #+#             */
-/*   Updated: 2024/08/20 22:09:30 by athonda          ###   ########.fr       */
+/*   Updated: 2024/08/21 22:30:27 by athonda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,13 @@ void	sub_stream(char **argv, int argc, int pipfd[3], int loop)
 	close(pipfd[0]);
 }
 
+void	main_stream(int pipfd[3], int i)
+{
+	if (i > 2)
+		close(pipfd[2]);
+	close(pipfd[1]);
+	pipfd[2] = pipfd[0];
+}
 /*
 void	parent(char **argv, char **envp, int *pipfd)
 {
@@ -58,12 +65,12 @@ void	parent(char **argv, char **envp, int *pipfd)
 }
 */
 
-void	pipex(int argc, char **argv, char **envp)
+int	pipex(int argc, char **argv, char **envp)
 {
 	pid_t	pid;
 	int		pipfd[3];
 	int		i;
-	//int		wstatus;
+	int		wstatus;
 
 	i = 1;
 	while (++i < argc - 1)
@@ -79,10 +86,12 @@ void	pipex(int argc, char **argv, char **envp)
 			exec_cmd(argv[i], envp);
 		}
 		else if (pid > 0)
-			close(pipfd[1]);
-		pipfd[2] = pipfd[0];
+			main_stream(pipfd, i);
 	}
+	close(pipfd[2]);
+	waitpid(pid, &wstatus, 0);
 	wait_all();
+	return (WEXITSTATUS(wstatus));
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -92,6 +101,5 @@ int	main(int argc, char **argv, char **envp)
 		perror("need more that 4 arguments: ./pipex file command command file");
 		return (0);
 	}
-	pipex(argc, argv, envp);
-	return (0);
+	return (pipex(argc, argv, envp));
 }

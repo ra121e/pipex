@@ -6,7 +6,7 @@
 /*   By: athonda <athonda@student.42singapore.sg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 10:42:48 by athonda           #+#    #+#             */
-/*   Updated: 2024/08/20 22:11:32 by athonda          ###   ########.fr       */
+/*   Updated: 2024/08/21 22:30:52 by athonda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,5 +39,6 @@ void	exec_cmd(char *cmd, char **envp);
 void	child(char **argv, char **envp, int *pipfd);
 void	parent(char **argv, char **envp, int *pipfd);
 void	sub_stream(char **argv, int argc, int pipfd[3], int loop);
-void	pipex(int argc, char **argv, char **envp);
+void	main_stream(int pipfd[3], int i);
+int		pipex(int argc, char **argv, char **envp);
 #endif //PIPEX_H
