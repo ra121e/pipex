@@ -6,7 +6,7 @@
 /*   By: athonda <athonda@student.42singapore.sg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 09:43:45 by athonda           #+#    #+#             */
-/*   Updated: 2024/08/22 08:49:22 by athonda          ###   ########.fr       */
+/*   Updated: 2024/08/22 12:56:22 by athonda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,15 +32,18 @@ void	sub_stream(int pipfd[3], char **argv, int argc, int loop)
 	{
 		pipfd[2] = open(argv[1], O_RDONLY, 0777);
 		if (pipfd[2] == -1)
+		{
 			perror(argv[1]);
+			exit(EXIT_FAILURE);
+		}
 	}
 	else if (loop == (argc - 2))
 		pipfd[1] = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (dup2(pipfd[1], STDOUT_FILENO) < 0)
-		error_exit("dup2 pipe write -> standard out: error in child");
+		error_exit("dup2 error");
 	close(pipfd[1]);
 	if (dup2(pipfd[2], STDIN_FILENO) < 0)
-		error_exit("dup2 pipe read -> standard IN: error in child");
+		error_exit("dup2 error");
 	close(pipfd[2]);
 	close(pipfd[0]);
 }
