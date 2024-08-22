@@ -6,7 +6,7 @@
 /*   By: athonda <athonda@student.42singapore.sg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 09:43:45 by athonda           #+#    #+#             */
-/*   Updated: 2024/08/21 22:30:27 by athonda          ###   ########.fr       */
+/*   Updated: 2024/08/22 08:49:22 by athonda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,13 @@
  * @return none
  */
 
-void	sub_stream(char **argv, int argc, int pipfd[3], int loop)
+void	sub_stream(int pipfd[3], char **argv, int argc, int loop)
 {
 	if (loop == 2)
 	{
 		pipfd[2] = open(argv[1], O_RDONLY, 0777);
 		if (pipfd[2] == -1)
-			perror("open file");
+			perror(argv[1]);
 	}
 	else if (loop == (argc - 2))
 		pipfd[1] = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0777);
@@ -45,12 +45,14 @@ void	sub_stream(char **argv, int argc, int pipfd[3], int loop)
 	close(pipfd[0]);
 }
 
-void	main_stream(int pipfd[3], int i)
+void	main_stream(int pipfd[3], int argc, int i)
 {
 	if (i > 2)
 		close(pipfd[2]);
 	close(pipfd[1]);
 	pipfd[2] = pipfd[0];
+	if (i >= argc - 2)
+		close(pipfd[2]);
 }
 /*
 void	parent(char **argv, char **envp, int *pipfd)
@@ -82,13 +84,12 @@ int	pipex(int argc, char **argv, char **envp)
 			error_exit("fork error!");
 		else if (pid == 0)
 		{
-			sub_stream(argv, argc, pipfd, i);
+			sub_stream(pipfd, argv, argc, i);
 			exec_cmd(argv[i], envp);
 		}
 		else if (pid > 0)
-			main_stream(pipfd, i);
+			main_stream(pipfd, argc, i);
 	}
-	close(pipfd[2]);
 	waitpid(pid, &wstatus, 0);
 	wait_all();
 	return (WEXITSTATUS(wstatus));
