@@ -6,7 +6,7 @@
 /*   By: athonda <athonda@student.42singapore.sg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 09:43:45 by athonda           #+#    #+#             */
-/*   Updated: 2024/08/22 12:56:22 by athonda          ###   ########.fr       */
+/*   Updated: 2024/08/23 19:25:05 by athonda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,12 @@
 #include "pipex.h"
 
 /**
- * @fn void	child
+ * @fn void	sub_stream(pipfd, argv, argc, loop)
  * @brief child process swich fd and call execute command function
  * @param[in] argv
  * @param[in] envp
- * @param[in] pipfd array of fd of pipe
+ * @param[in] pipfd [0] [1]: array of fd of the latter pipe, [2] previous pipe
+ * @param[in] loop index of while loop of calling function pipex_bonus
  * @return none
  */
 
@@ -33,6 +34,7 @@ void	sub_stream(int pipfd[3], char **argv, int argc, int loop)
 		pipfd[2] = open(argv[1], O_RDONLY, 0777);
 		if (pipfd[2] == -1)
 		{
+			ft_putstr_fd("pipex: ", 2);
 			perror(argv[1]);
 			exit(EXIT_FAILURE);
 		}
@@ -57,20 +59,8 @@ void	main_stream(int pipfd[3], int argc, int i)
 	if (i >= argc - 2)
 		close(pipfd[2]);
 }
-/*
-void	parent(char **argv, char **envp, int *pipfd)
-{
-	int	fd;
 
-	close(pipfd[1]);
-	if (dup2(pipfd[0], STDIN_FILENO) < 0)
-		perror("dup2 pipe read -> standard IN: error in parent");
-	if (dup2(fd, STDOUT_FILENO) < 0)
-		perror("dup2 pipe write -> standard OUT: error in parent");
-}
-*/
-
-int	pipex(int argc, char **argv, char **envp)
+int	pipex_bonus(int argc, char **argv, char **envp)
 {
 	pid_t	pid;
 	int		pipfd[3];
@@ -105,5 +95,5 @@ int	main(int argc, char **argv, char **envp)
 		perror("need more that 4 arguments: ./pipex file command command file");
 		return (0);
 	}
-	return (pipex(argc, argv, envp));
+	return (pipex_bonus(argc, argv, envp));
 }
