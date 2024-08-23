@@ -6,18 +6,18 @@
 #    By: athonda <athonda@student.42singapore.sg    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/13 13:34:27 by athonda           #+#    #+#              #
-#    Updated: 2024/08/23 21:00:33 by athonda          ###   ########.fr        #
+#    Updated: 2024/08/23 22:05:52 by athonda          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	=	pipex
 
 SRCS	=	pipex.c get_fullpath.c exec_cmd.c free_split.c \
-			error.c
+			error.c wait_all.c
 
 OBJS	=	$(patsubst %.c,%.o,$(SRCS))
 
-CFLAGS	=	-Wall -Wextra -Werror -g3 -O0
+CFLAGS	=	-Wall -Wextra -Werror
 
 LIBFT_DIR	=	libft
 LIBFT		=	$(LIBFT_DIR)/libft.a
