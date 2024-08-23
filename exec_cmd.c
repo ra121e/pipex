@@ -6,7 +6,7 @@
 /*   By: athonda <athonda@student.42singapore.sg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 11:28:26 by athonda           #+#    #+#             */
-/*   Updated: 2024/08/23 19:28:50 by athonda          ###   ########.fr       */
+/*   Updated: 2024/08/23 20:46:54 by athonda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,12 @@ void	exec_cmd(char *cmd, char **envp)
 	cmd_parts = ft_split(cmd, ' ');
 	if (cmd_parts == NULL)
 		exit(EXIT_FAILURE);
+	if (cmd_parts[0] == NULL)
+	{
+		ft_putstr_fd("pipex: Permission denied:\n", 2);
+		free_split(cmd_parts);
+		exit(126);
+	}
 	execve(cmd_parts[0], cmd_parts, envp);
 	cmd_exe = get_fullpath(cmd_parts[0], envp);
 	if (cmd_exe == NULL)
