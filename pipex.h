@@ -6,7 +6,7 @@
 /*   By: athonda <athonda@student.42singapore.sg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 10:42:48 by athonda           #+#    #+#             */
-/*   Updated: 2024/08/23 19:20:26 by athonda          ###   ########.fr       */
+/*   Updated: 2024/08/23 21:01:40 by athonda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ int		ft_setstr(char const *s, char c, size_t nbr_words, char **word);
 char	**ft_split(char const *s, char c);
 void	free_split(char **str);
 void	error_exit(char *str);
+void	error_empty_cmd(char **cmd_parts);
+void	error_wrong_cmd(char **cmd_parts);
 void	wait_all(void);
 char	**find_envpath(char **envp);
 char	*join_cmd_path(char *cmd, char *path);

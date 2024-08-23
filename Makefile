@@ -6,14 +6,14 @@
 #    By: athonda <athonda@student.42singapore.sg    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/13 13:34:27 by athonda           #+#    #+#              #
-#    Updated: 2024/08/20 22:06:50 by athonda          ###   ########.fr        #
+#    Updated: 2024/08/23 21:00:33 by athonda          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	=	pipex
 
-SRCS	=	pipex.c get_fullpath.c exec_cmd.c \
-			free_split.c
+SRCS	=	pipex.c get_fullpath.c exec_cmd.c free_split.c \
+			error.c
 
 OBJS	=	$(patsubst %.c,%.o,$(SRCS))
 
@@ -25,7 +25,7 @@ LIBFT		=	$(LIBFT_DIR)/libft.a
 NAME_BONUS	=	pipex_bonus
 
 SRCS_BONUS	=	pipex_bonus.c get_fullpath.c exec_cmd.c free_split.c \
-				error_exit.c wait_all.c
+				error.c wait_all.c
 
 OBJS_BONUS	=	$(patsubst %.c,%.o,$(SRCS_BONUS))
 
