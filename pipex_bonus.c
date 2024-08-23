@@ -6,7 +6,7 @@
 /*   By: athonda <athonda@student.42singapore.sg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 09:43:45 by athonda           #+#    #+#             */
-/*   Updated: 2024/08/23 19:25:05 by athonda          ###   ########.fr       */
+/*   Updated: 2024/08/23 21:56:00 by athonda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	sub_stream(int pipfd[3], char **argv, int argc, int loop)
 {
 	if (loop == 2)
 	{
-		pipfd[2] = open(argv[1], O_RDONLY, 0777);
+		pipfd[2] = open(argv[1], O_RDONLY);
 		if (pipfd[2] == -1)
 		{
 			ft_putstr_fd("pipex: ", 2);
@@ -40,7 +40,7 @@ void	sub_stream(int pipfd[3], char **argv, int argc, int loop)
 		}
 	}
 	else if (loop == (argc - 2))
-		pipfd[1] = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0777);
+		pipfd[1] = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (dup2(pipfd[1], STDOUT_FILENO) < 0)
 		error_exit("dup2 error");
 	close(pipfd[1]);
