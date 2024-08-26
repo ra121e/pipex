@@ -6,7 +6,7 @@
 /*   By: athonda <athonda@student.42singapore.sg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 09:43:45 by athonda           #+#    #+#             */
-/*   Updated: 2024/08/23 21:56:00 by athonda          ###   ########.fr       */
+/*   Updated: 2024/08/26 08:38:07 by athonda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int	main(int argc, char **argv, char **envp)
 {
 	if (argc < 5)
 	{
-		perror("need more that 4 arguments: ./pipex file command command file");
+		ft_putstr_fd("format: ./pipex file command...command file\n", 2);
 		return (0);
 	}
 	return (pipex_bonus(argc, argv, envp));
